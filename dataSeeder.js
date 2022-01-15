@@ -4,6 +4,7 @@ const initData = async db => {
     }
     const randomUser = await db.User.findOne({ where: { username: "username1" } })
 
+
     for (let i = 1; i < 4; i++) {
         await db.Poll.create({
             title: "Poll number" + i,

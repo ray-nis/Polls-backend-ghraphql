@@ -1,6 +1,6 @@
 const typeDef = `
     extend type Query {
-        polls: [Poll]!n
+        polls: Int!
     }
 
     type Poll {
