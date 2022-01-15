@@ -3,10 +3,19 @@ module.exports = (sequelize, DataTypes) => {
         username: {
             type: DataTypes.STRING,
             unique: true,
+            allowNull: false,
         },
         password: {
             type: DataTypes.STRING,
-        },
+            allowNull: false,
+        }
     })
+
+    User.associate = (models) => {
+        User.hasMany(models.Poll, {
+            foreignKey: "author",
+            allowNull: false,
+        })
+    }
     return User
 }
