@@ -8,9 +8,9 @@ const Query = `
   }
 `
 
-const resolvers = {};
+const resolvers = {}
 
 module.exports = makeExecutableSchema({
-  typeDefs: [ Query, Poll ],
-  resolvers: lodash.merge(resolvers, pollResolver),
-});
+    typeDefs: [ Query, Poll ],
+    resolvers: lodash.merge(resolvers, pollResolver),
+})
