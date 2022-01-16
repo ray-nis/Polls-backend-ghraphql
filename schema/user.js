@@ -7,6 +7,7 @@ const typeDef = `
     type User {
         id: ID!
         username: String!
+        pollsPosted: [Poll!]!
     }
 `
 
@@ -21,6 +22,15 @@ const resolvers = {
                 throw new Error(`User with id ${args.id} is not found`)
             }
             return user
+        }
+    },
+    User: {
+        pollsPosted: async (parent, args, context) => {
+            return await context.db.Poll.findAll({ 
+                where: {
+                    author: parent.id
+                }
+            })
         }
     }
 }
