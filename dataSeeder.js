@@ -1,6 +1,8 @@
+const bcrypt = require("bcrypt")
+
 const initData = async db => {
     for (let i = 1; i < 6; i++) {
-        await db.User.create({ username: "username" + i, password: "password"})
+        await db.User.create({ username: "username" + i, password: await bcrypt.hash("password", 10)})
     }
     const randomUser = await db.User.findOne({ where: { username: "username1" } })
 
