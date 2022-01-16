@@ -1,6 +1,6 @@
 const typeDef = `
     extend type Query {
-        polls: Int!
+        polls: [Poll!]!
         poll(id: Int!): Poll
     }
 
@@ -14,7 +14,9 @@ const typeDef = `
 
 const resolvers = {
     Query: {
-        polls: () => 35,
+        polls: async (parents, args, context) => {
+            return await context.db.Poll.findAll()
+        },
         poll: async (parents, args, context) => {
             const poll = await context.db.Poll.findByPk(args.id)
             if (poll === null) {
