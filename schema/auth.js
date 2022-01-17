@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt")
 const { UserInputError } = require("apollo-server")
 
 const typeDef = `
+    directive @isAuthenticated on FIELD_DEFINITION
+
     type AuthPayload {
         token: String
     }

@@ -12,7 +12,7 @@ const typeDef = `
     }
 
     extend type Mutation {
-        createPoll(title: String!, options: [String!]): Poll!
+        createPoll(title: String!, options: [String!]): Poll! @isAuthenticated
     }
 `
 
@@ -31,10 +31,9 @@ const resolvers = {
     },
     Mutation: {
         createPoll: async (parent, args, context) => {
-            const user = await context.db.User.findByPk(3)
             return await context.db.Poll.create({
                 title: args.title,
-                author: user.id, //TODO Replace with current user 
+                author: context.user.id,
                 pollOptions: args.options.map(e => {
                     return { text: e }
                 })

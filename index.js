@@ -1,11 +1,14 @@
 const { ApolloServer } = require("apollo-server")
 const db = require("./models")
 const schema = require("./schema/schema")
+const { getUser } = require("./utils")
 
-const server = new ApolloServer({ schema, context: ({ req }) => {
+const server = new ApolloServer({ schema, context: async ({ req }) => {
+    const user = await getUser(req, db)
     return {
         ...req,
         db,
+        user: user
     }
 } 
 })
