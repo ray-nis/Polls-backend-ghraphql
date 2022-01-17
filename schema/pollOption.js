@@ -17,9 +17,20 @@ const resolvers = {
             if (option === null) {
                 throw new Error("Not found")
             }
+            const vote = await context.db.Vote.findOne({ 
+                where: { userId: 3, pollId: option.pollId } 
+            })
+            if (vote !== null) {
+                throw new Error("You've already cast a vote for this poll")
+            }
 
             option.votes = option.votes + 1
             await option.save()
+            await context.db.Vote.create({
+                userId: 3, // TODO CURRENT USER
+                pollId: option.pollId,
+                choiceId: option.id
+            })
 
             return await context.db.Poll.findByPk(option.pollId)
         }

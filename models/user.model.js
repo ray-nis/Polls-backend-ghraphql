@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Poll, {
             foreignKey: "author",
             allowNull: false,
+        }),
+        User.belongsToMany(models.Poll, {
+            through: "vote"
         })
     }
     return User
