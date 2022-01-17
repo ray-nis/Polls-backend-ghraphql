@@ -6,7 +6,7 @@ const typeDef = `
     }
 
     extend type Mutation {
-        vote(optionId: Int!): Poll!
+        vote(optionId: Int!): Poll! @isAuthenticated
     }
 `
 
@@ -18,7 +18,7 @@ const resolvers = {
                 throw new Error("Not found")
             }
             const vote = await context.db.Vote.findOne({ 
-                where: { userId: 3, pollId: option.pollId } 
+                where: { userId: context.user.id, pollId: option.pollId } 
             })
             if (vote !== null) {
                 throw new Error("You've already cast a vote for this poll")
@@ -27,7 +27,7 @@ const resolvers = {
             option.votes = option.votes + 1
             await option.save()
             await context.db.Vote.create({
-                userId: 3, // TODO CURRENT USER
+                userId: context.user.id,
                 pollId: option.pollId,
                 choiceId: option.id
             })

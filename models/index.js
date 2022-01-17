@@ -4,7 +4,7 @@ const initData = require("../dataSeeder")
 const sequelize = new Sequelize("poll", "root", "root", {
     host: "localhost",
     dialect: "mysql",
-    logging: true, 
+    logging: false, 
 })
 
 const db = {
