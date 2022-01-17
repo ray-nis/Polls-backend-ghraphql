@@ -10,6 +10,10 @@ const typeDef = `
         author: User!
         options: [PollOption!]!
     }
+
+    extend type Mutation {
+        createPoll(title: String!, options: [String!]): Poll!
+    }
 `
 
 const resolvers = {
@@ -23,6 +27,18 @@ const resolvers = {
                 throw new Error(`Poll with id ${args.id} is not found`)
             }
             return poll
+        }
+    },
+    Mutation: {
+        createPoll: async (parent, args, context) => {
+            const user = await context.db.User.findByPk(3)
+            return await context.db.Poll.create({
+                title: args.title,
+                author: user.id, //TODO Replace with current user 
+                pollOptions: args.options.map(e => {
+                    return { text: e }
+                })
+            }, { include: [ context.db.PollOption ] })
         }
     },
     Poll: {
