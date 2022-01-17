@@ -1,3 +1,6 @@
+const { PubSub } = require("graphql-subscriptions")
+const pubsub = new PubSub()
+
 const typeDef = `
     extend type Query {
         polls: [Poll!]!
@@ -13,6 +16,10 @@ const typeDef = `
 
     extend type Mutation {
         createPoll(title: String!, options: [String!]): Poll! @isAuthenticated
+    }
+
+    type Subscription {
+        newPoll: Poll!
     }
 `
 
@@ -31,13 +38,21 @@ const resolvers = {
     },
     Mutation: {
         createPoll: async (parent, args, context) => {
-            return await context.db.Poll.create({
+            const poll = await context.db.Poll.create({
                 title: args.title,
                 author: context.user.id,
                 pollOptions: args.options.map(e => {
                     return { text: e }
                 })
             }, { include: [ context.db.PollOption ] })
+
+            pubsub.publish("NEW_POLL", { newPoll: poll })
+            return poll
+        }
+    },
+    Subscription: {
+        newPoll: {
+            subscribe: () => pubsub.asyncIterator(["NEW_POLL"])
         }
     },
     Poll: {

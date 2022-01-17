@@ -13,6 +13,7 @@ const server = new ApolloServer({ schema, context: async ({ req }) => {
 } 
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
     console.log(`Server started at ${url}`)
+    console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
