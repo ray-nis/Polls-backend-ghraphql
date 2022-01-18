@@ -1,4 +1,6 @@
 const jwt = require("jsonwebtoken")
+const { PubSub } = require("graphql-subscriptions")
+const pubsub = new PubSub()
 
 const getUser = async (req, db) => {
     const auth = req ? req.headers.authorization : null
@@ -15,4 +17,4 @@ const getUser = async (req, db) => {
     return null
 }
 
-module.exports = { getUser }
+module.exports = { getUser, pubsub }

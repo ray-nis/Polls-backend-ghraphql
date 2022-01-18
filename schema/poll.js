@@ -1,5 +1,5 @@
-const { PubSub } = require("graphql-subscriptions")
-const pubsub = new PubSub()
+const { withFilter } = require("graphql-subscriptions")
+const { pubsub } = require("../utils")
 
 const typeDef = `
     extend type Query {
@@ -20,6 +20,7 @@ const typeDef = `
 
     type Subscription {
         newPoll: Poll!
+        livePoll(id: Int!): Poll!
     }
 `
 
@@ -53,6 +54,14 @@ const resolvers = {
     Subscription: {
         newPoll: {
             subscribe: () => pubsub.asyncIterator(["NEW_POLL"])
+        },
+        livePoll: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator("POLL"),
+                (payload, variables) => {
+                    return (payload.livePoll.id === variables.id)
+                },
+            ),
         }
     },
     Poll: {

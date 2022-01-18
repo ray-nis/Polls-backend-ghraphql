@@ -1,3 +1,5 @@
+const { pubsub } = require("../utils")
+
 const typeDef = `
     type PollOption {
         id: ID!
@@ -32,7 +34,11 @@ const resolvers = {
                 choiceId: option.id
             })
 
-            return await context.db.Poll.findByPk(option.pollId)
+            const poll = await context.db.Poll.findByPk(option.pollId)
+
+            pubsub.publish("POLL", { livePoll: poll })
+
+            return poll
         }
     }
 }
