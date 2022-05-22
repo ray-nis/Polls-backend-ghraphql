@@ -1,7 +1,7 @@
 # Polls
 
 #### What is it?
-An app where users can create polls and vote on other user-created polls.
+Backend app where users can create polls and vote on other user-created polls.
 
 
 #### Technologies used:
